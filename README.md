@@ -26,6 +26,7 @@ $ cat .gitignore
 *.[oa]
 *~
 
+
 # 此为注释 – 将被 Git 忽略
 *.a       # 忽略所有 .a 结尾的文件
 !lib.a    # 但 lib.a 除外
@@ -86,17 +87,40 @@ $ git commit --amend
 $ git push origin master
 
 
+查看远程仓库信息
+我们可以通过命令 git remote show [remote-name] 查看某个远程仓库的详细信息，比如要看所克隆的 origin 仓库，可以运行：
+
+新建标签tag:
+
+新建标签
+Git 使用的标签有两种类型：轻量级的（lightweight）和含附注的（annotated）。轻量级标签就像是个不会变化的分支，实际上它就是个指向特 定提交对象的引用。而含附注标签，实际上是存储在仓库中的一个独立对象，它有自身的校验和信息，包含着标签的名字，电子邮件地址和日期，以及标签说明，标 签本身也允许使用 GNU Privacy Guard (GPG) 来签署或验证。一般我们都建议使用含附注型的标签，以便保留相关信息；当然，如果只是临时性加注标签，或者不需要旁注额外信息，用轻量级标签也没问题。
+
+含附注的标签
+创建一个含附注类型的标签非常简单，用 -a （译注：取 annotated 的首字母）指定标签名字即可：
+
+签署标签
+如果你有自己的私钥，还可以用 GPG 来签署标签，只需要把之前的 -a 改为 -s （译注： 取 signed 的首字母）即可：
+$ git tag -s v1.0 -m 'my signed 1.0 tag'
+
+轻量级标签
+轻量级标签实际上就是一个保存着对应提交对象的校验和信息的文件。要创建这样的标签，一个 -a，-s 或 -m 选项都不用，直接给出标签名字即可：
+$ git tag v1.0
+
+验证标签
+可以使用 git tag -v [tag-name] （译注：取 verify 的首字母）的方式验证已经签署的标签。此命令会调用 GPG 来验证签名，所以你需要有签署者的公钥，存放在 keyring 中，才能验证：
+$ git tag -v v1.10
 
 
+分享标签
+默认情况下，git push 并不会把标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。其命令格式如同推送分支，运行git push origin [tagname] 即可：
+$ git push origin v1.0
+Counting objects: 1, done.
+Writing objects: 100% (1/1), 181 bytes | 0 bytes/s, done.
+Total 1 (delta 0), reused 0 (delta 0)
+To https://github.com/MariShunxiang/GitTrainning.git
+ * [new tag]         v1.0 -> v1.0
 
-
-
-
-
-
-
-
-
+如果要一次推送所有本地新增的标签上去，可以使用 --tags 选项：
 
 
 
